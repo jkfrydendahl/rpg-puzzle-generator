@@ -1,60 +1,44 @@
 /**
- * SAMPLE SEED DATA
+ * SAMPLE SEED DATA ONLY
  *
- * This file contains example entries used to establish schema,
- * compatibility rules, and generator behavior.
+ * These entries are examples used to establish schema, compatibility rules,
+ * and generator behavior. They are not intended to represent a complete
+ * production dataset.
  *
- * These entries are NOT intended to represent a complete dataset.
- *
- * The generator must treat this data as extensible. Additional
- * entries may be added later without changing generator logic.
- *
- * When generating puzzles, the system should not assume these
- * are the only possible components.
+ * Add more entries freely as long as they follow the same contracts.
  */
 
-export const difficultyProfiles = [
+import type { DifficultyProfile } from "../types/puzzle";
 
-{
-  id: "easy",
-
-  minSteps: 2,
-
-  maxSteps: 3,
-
-  minClues: 2,
-
-  maxClues: 3,
-
-  allowTwist: false
-},
-
-{
-  id: "medium",
-
-  minSteps: 3,
-
-  maxSteps: 4,
-
-  minClues: 2,
-
-  maxClues: 4,
-
-  allowTwist: true
-},
-
-{
-  id: "hard",
-
-  minSteps: 4,
-
-  maxSteps: 5,
-
-  minClues: 3,
-
-  maxClues: 5,
-
-  allowTwist: true
-}
-
+export const difficultyProfiles: DifficultyProfile[] = [
+  {
+    id: "easy",
+    minSteps: 2,
+    maxSteps: 3,
+    minClues: 2,
+    maxClues: 3,
+    allowTwist: false,
+    allowMisleadingClues: false,
+    maxConsequenceSeverity: "low",
+  },
+  {
+    id: "medium",
+    minSteps: 3,
+    maxSteps: 4,
+    minClues: 2,
+    maxClues: 4,
+    allowTwist: true,
+    allowMisleadingClues: false,
+    maxConsequenceSeverity: "medium",
+  },
+  {
+    id: "hard",
+    minSteps: 4,
+    maxSteps: 5,
+    minClues: 3,
+    maxClues: 5,
+    allowTwist: true,
+    allowMisleadingClues: true,
+    maxConsequenceSeverity: "high",
+  },
 ];

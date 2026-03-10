@@ -1,56 +1,210 @@
 /**
- * SAMPLE SEED DATA
+ * SAMPLE SEED DATA ONLY
  *
- * This file contains example entries used to establish schema,
- * compatibility rules, and generator behavior.
+ * These entries are examples used to establish schema, compatibility rules,
+ * and generator behavior. They are not intended to represent a complete
+ * production dataset.
  *
- * These entries are NOT intended to represent a complete dataset.
- *
- * The generator must treat this data as extensible. Additional
- * entries may be added later without changing generator logic.
- *
- * When generating puzzles, the system should not assume these
- * are the only possible components.
+ * Add more entries freely as long as they follow the same contracts.
  */
 
-import { ClueType } from "../types/components";
+import type { ClueType } from "../types/components";
 
 export const clueTypes: ClueType[] = [
+  {
+    id: "inscription",
+    label: "Inscription",
+    compatibleArchetypeIds: ["sequence", "deduction", "routing", "symbol-translation"],
+    directness: "partial",
+    abstractionLevel: "medium",
+    canMislead: true,
+  },
+  {
+    id: "mural",
+    label: "Mural",
+    compatibleArchetypeIds: ["sequence", "alignment", "deduction", "routing", "symbol-translation"],
+    directness: "partial",
+    abstractionLevel: "medium",
+    canMislead: false,
+  },
+  {
+    id: "journal-fragment",
+    label: "Journal Fragment",
+    compatibleArchetypeIds: ["sequence", "deduction", "symbol-translation"],
+    directness: "direct",
+    abstractionLevel: "low",
+    canMislead: true,
+  },
+  {
+    id: "statue-pose",
+    label: "Statue Pose",
+    compatibleArchetypeIds: ["alignment"],
+    directness: "partial",
+    abstractionLevel: "low",
+    canMislead: false,
+  },
+  {
+    id: "environmental-pattern",
+    label: "Environmental Pattern",
+    compatibleArchetypeIds: ["alignment", "routing", "trial-and-error"],
+    directness: "indirect",
+    abstractionLevel: "high",
+    canMislead: false,
+  },
+  {
+    id: "ghost-replay",
+    label: "Ghost Replay",
+    compatibleArchetypeIds: ["deduction"],
+    directness: "partial",
+    abstractionLevel: "medium",
+    canMislead: false,
+  },
+  {
+    id: "color-coding",
+    label: "Color Coding",
+    compatibleArchetypeIds: ["sequence", "symbol-translation"],
+    directness: "partial",
+    abstractionLevel: "low",
+    canMislead: false,
+  },
+  {
+    id: "constellation-map",
+    label: "Constellation Map",
+    compatibleArchetypeIds: ["alignment"],
+    directness: "indirect",
+    abstractionLevel: "high",
+    canMislead: false,
+  },
 
-{
-  id: "inscription",
+  // ── New clue types ─────────────────────────────────────────
+  {
+    id: "mosaic-fragment",
+    label: "Mosaic Fragment",
+    compatibleArchetypeIds: ["pattern-matching", "assembly", "alignment"],
+    directness: "partial",
+    abstractionLevel: "medium",
+    canMislead: false,
+  },
+  {
+    id: "sound-echo",
+    label: "Sound Echo",
+    compatibleArchetypeIds: ["pattern-matching", "cause-and-effect", "sequence", "trial-and-error"],
+    directness: "indirect",
+    abstractionLevel: "high",
+    canMislead: false,
+  },
+  {
+    id: "carved-relief",
+    label: "Carved Relief",
+    compatibleArchetypeIds: ["weight-balance", "elimination", "riddle-lock", "environment-manipulation", "assembly"],
+    directness: "partial",
+    abstractionLevel: "medium",
+    canMislead: true,
+  },
+  {
+    id: "witness-account",
+    label: "Witness Account",
+    compatibleArchetypeIds: ["elimination", "deduction"],
+    directness: "direct",
+    abstractionLevel: "low",
+    canMislead: true,
+  },
+  {
+    id: "riddle-verse",
+    label: "Riddle Verse",
+    compatibleArchetypeIds: ["riddle-lock", "symbol-translation", "elimination"],
+    directness: "indirect",
+    abstractionLevel: "high",
+    canMislead: true,
+  },
+  {
+    id: "floor-markings",
+    label: "Floor Markings",
+    compatibleArchetypeIds: ["routing", "alignment", "pattern-matching", "weight-balance"],
+    directness: "partial",
+    abstractionLevel: "low",
+    canMislead: false,
+  },
+  {
+    id: "scent-trail",
+    label: "Scent Trail",
+    compatibleArchetypeIds: ["routing", "elimination"],
+    directness: "indirect",
+    abstractionLevel: "high",
+    canMislead: false,
+  },
+  {
+    id: "shadow-projection",
+    label: "Shadow Projection",
+    compatibleArchetypeIds: ["alignment", "pattern-matching", "environment-manipulation"],
+    directness: "partial",
+    abstractionLevel: "medium",
+    canMislead: false,
+  },
+  {
+    id: "mechanical-diagram",
+    label: "Mechanical Diagram",
+    compatibleArchetypeIds: ["cause-and-effect", "routing", "assembly"],
+    directness: "direct",
+    abstractionLevel: "low",
+    canMislead: false,
+  },
+  {
+    id: "temperature-gradient",
+    label: "Temperature Gradient",
+    compatibleArchetypeIds: ["routing", "cause-and-effect", "environment-manipulation", "trial-and-error"],
+    directness: "indirect",
+    abstractionLevel: "high",
+    canMislead: false,
+  },
 
-  label: "Inscription",
-
-  compatibleArchetypeIds: [
-    "sequence",
-    "deduction",
-    "symbol-translation"
-  ],
-
-  directness: "partial",
-
-  abstractionLevel: "medium",
-
-  canMislead: true
-},
-
-{
-  id: "mural",
-
-  label: "Mural",
-
-  compatibleArchetypeIds: [
-    "sequence",
-    "alignment",
-    "deduction"
-  ],
-
-  directness: "partial",
-
-  abstractionLevel: "medium",
-
-  canMislead: false
-}
-
+  // ── Resource-inspired clue types ───────────────────────────
+  {
+    id: "coded-message",
+    label: "Coded Message",
+    compatibleArchetypeIds: ["cipher-decode", "deduction", "symbol-translation", "pattern-matching"],
+    directness: "indirect",
+    abstractionLevel: "high",
+    canMislead: true,
+  },
+  {
+    id: "npc-dialogue",
+    label: "NPC Dialogue",
+    compatibleArchetypeIds: ["riddle-lock", "elimination", "deduction", "cooperative-lock"],
+    directness: "partial",
+    abstractionLevel: "medium",
+    canMislead: true,
+  },
+  {
+    id: "physical-residue",
+    label: "Physical Residue",
+    compatibleArchetypeIds: ["deduction", "elimination", "spatial-navigation", "trial-and-error"],
+    directness: "indirect",
+    abstractionLevel: "medium",
+    canMislead: false,
+  },
+  {
+    id: "musical-phrase",
+    label: "Musical Phrase",
+    compatibleArchetypeIds: ["sequence", "pattern-matching", "cipher-decode"],
+    directness: "partial",
+    abstractionLevel: "medium",
+    canMislead: false,
+  },
+  {
+    id: "illusory-image",
+    label: "Illusory Image",
+    compatibleArchetypeIds: ["alignment", "deduction", "elimination", "spatial-navigation"],
+    directness: "indirect",
+    abstractionLevel: "high",
+    canMislead: true,
+  },
+  {
+    id: "tactile-difference",
+    label: "Tactile Difference",
+    compatibleArchetypeIds: ["trial-and-error", "deduction", "spatial-navigation", "elimination"],
+    directness: "indirect",
+    abstractionLevel: "medium",
+    canMislead: false,
+  },
 ];

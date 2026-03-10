@@ -1,22 +1,30 @@
 /**
- * SAMPLE SEED DATA
+ * SAMPLE SEED DATA ONLY
  *
- * This file contains example entries used to establish schema,
- * compatibility rules, and generator behavior.
+ * These entries are examples used to establish schema, compatibility rules,
+ * and generator behavior. They are not intended to represent a complete
+ * production dataset.
  *
- * These entries are NOT intended to represent a complete dataset.
- *
- * The generator must treat this data as extensible. Additional
- * entries may be added later without changing generator logic.
- *
- * When generating puzzles, the system should not assume these
- * are the only possible components.
+ * Add more entries freely as long as they follow the same contracts.
  */
 
-export const incompatibleTagPairs = [
+export const requiredTagGroups: Record<string, string[]> = {
+  sigils: ["rotating-rings", "sigil-stones", "symbol-translation"],
+  mechanical: ["levers", "pressure-plates", "routing", "gear-wheels", "chain-pulleys", "lock-tumblers", "pipes-valves"],
+  visual: ["mirrors", "statues", "mural", "mosaic-floor", "crystal-lenses", "painting-frames"],
+  arcane: ["sigil-nodes", "rune-pillars", "sigil-stones", "colored-gems"],
+  elemental: ["water-channels", "braziers", "crystal-lenses", "pipes-valves"],
+  auditory: ["chimes", "bell-tower"],
+  weighted: ["pressure-plates", "scales", "chain-pulleys"],
+  navigation: ["floor-tiles", "trap-doors", "sliding-tiles", "mosaic-floor"],
+};
 
-["musical","water-channels"],
-
-["darkness","color-coding"]
-
+export const incompatibleTagPairs: [string, string][] = [
+  ["musical", "water-channels"],
+  ["darkness", "color-coding"],
+  ["fire", "ice"],
+  ["stealth", "musical"],
+  ["darkness", "shadow-projection"],
+  ["underwater", "fire"],
+  ["illusion", "direct"],
 ];

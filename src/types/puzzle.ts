@@ -99,6 +99,8 @@ export type PuzzleValidation = {
   clueCoverage: number;
 
   contradictionWarnings: string[];
+
+  softWarnings: string[];
 };
 
 export type PuzzleGMNotes = {
@@ -107,4 +109,23 @@ export type PuzzleGMNotes = {
   bypassIdeas: string[];
 
   pacingAdvice: string;
+};
+
+export type DifficultyProfile = {
+  id: PuzzleDifficulty;
+  minSteps: number;
+  maxSteps: number;
+  minClues: number;
+  maxClues: number;
+  allowTwist: boolean;
+  allowMisleadingClues: boolean;
+  maxConsequenceSeverity: "low" | "medium" | "high";
+};
+
+export type PuzzleSeed = {
+  difficulty: PuzzleDifficulty;
+  environment?: string;
+  archetypeId?: string;
+  requiredTags?: string[];
+  excludedTags?: string[];
 };

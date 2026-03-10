@@ -75,3 +75,40 @@ export type ConsequenceType = {
 
   allowedDifficulties: string[];
 };
+
+/**
+ * Environments describe dungeon locations where puzzles occur.
+ * They influence which archetypes, interfaces, and flavour fit.
+ */
+
+export type Environment = {
+  id: string;
+
+  label: string;
+
+  description: string;
+
+  /** Tags that influence component selection. */
+  tags: string[];
+
+  /** Interface ids that feel natural in this environment. */
+  suggestedInterfaceIds: string[];
+
+  /** Archetype ids that work well in this setting. */
+  suggestedArchetypeIds: string[];
+};
+
+/**
+ * Design rules encode hard constraints the generator must obey.
+ */
+
+export type DesignRule = {
+  id: string;
+
+  label: string;
+
+  description: string;
+
+  /** 'hard' rules cause validation failures; 'soft' rules produce warnings. */
+  severity: "hard" | "soft";
+};

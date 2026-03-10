@@ -1,69 +1,278 @@
 /**
- * SAMPLE SEED DATA
+ * SAMPLE SEED DATA ONLY
  *
- * This file contains example entries used to establish schema,
- * compatibility rules, and generator behavior.
+ * These entries are examples used to establish schema, compatibility rules,
+ * and generator behavior. They are not intended to represent a complete
+ * production dataset.
  *
- * These entries are NOT intended to represent a complete dataset.
- *
- * The generator must treat this data as extensible. Additional
- * entries may be added later without changing generator logic.
- *
- * When generating puzzles, the system should not assume these
- * are the only possible components.
+ * Add more entries freely as long as they follow the same contracts.
  */
 
-import { InterfaceComponent } from "../types/components";
+import type { InterfaceComponent } from "../types/components";
 
 export const interfaces: InterfaceComponent[] = [
+  {
+    id: "rotating-rings",
+    label: "Rotating Rings",
+    tags: ["sigils", "mechanical", "circular"],
+    compatibleArchetypeIds: ["sequence", "alignment", "symbol-translation"],
+    interactionVerbs: ["rotate", "align", "lock"],
+    stateCapacity: 8,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "levers",
+    label: "Lever Array",
+    tags: ["mechanical", "binary", "visible-state"],
+    compatibleArchetypeIds: ["sequence", "routing"],
+    interactionVerbs: ["pull", "reset", "lock"],
+    stateCapacity: 6,
+    supportsOrder: true,
+    supportsSimultaneousInput: true,
+  },
+  {
+    id: "mirrors",
+    label: "Mirror Assemblies",
+    tags: ["light", "reflection", "spatial"],
+    compatibleArchetypeIds: ["alignment", "routing"],
+    interactionVerbs: ["turn", "tilt", "focus"],
+    stateCapacity: 12,
+    supportsOrder: false,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "statues",
+    label: "Carved Statues",
+    tags: ["visual", "positional", "thematic"],
+    compatibleArchetypeIds: ["alignment", "deduction", "symbol-translation"],
+    interactionVerbs: ["turn", "face", "place"],
+    stateCapacity: 8,
+    supportsOrder: false,
+    supportsSimultaneousInput: true,
+  },
+  {
+    id: "sigil-stones",
+    label: "Sigil Stones",
+    tags: ["arcane", "symbolic", "modular"],
+    compatibleArchetypeIds: ["sequence", "deduction", "symbol-translation"],
+    interactionVerbs: ["place", "swap", "press"],
+    stateCapacity: 10,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "pressure-plates",
+    label: "Pressure Plates",
+    tags: ["mechanical", "weighted", "hidden-state"],
+    compatibleArchetypeIds: ["deduction", "sequence"],
+    interactionVerbs: ["step", "place", "weigh"],
+    stateCapacity: 6,
+    supportsOrder: true,
+    supportsSimultaneousInput: true,
+  },
+  {
+    id: "sliding-tiles",
+    label: "Sliding Tiles",
+    tags: ["mechanical", "spatial", "positional"],
+    compatibleArchetypeIds: ["alignment", "deduction"],
+    interactionVerbs: ["slide", "push", "swap"],
+    stateCapacity: 9,
+    supportsOrder: false,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "water-channels",
+    label: "Water Channels",
+    tags: ["elemental", "flow", "environmental"],
+    compatibleArchetypeIds: ["routing"],
+    interactionVerbs: ["redirect", "block", "open"],
+    stateCapacity: 8,
+    supportsOrder: false,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "chimes",
+    label: "Resonating Chimes",
+    tags: ["musical", "tonal", "auditory"],
+    compatibleArchetypeIds: ["sequence"],
+    interactionVerbs: ["strike", "ring", "dampen"],
+    stateCapacity: 6,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "sigil-nodes",
+    label: "Sigil Nodes",
+    tags: ["arcane", "network", "connective"],
+    compatibleArchetypeIds: ["routing"],
+    interactionVerbs: ["activate", "connect", "channel"],
+    stateCapacity: 10,
+    supportsOrder: false,
+    supportsSimultaneousInput: false,
+  },
 
-{
-  id: "rotating-rings",
+  // ── New interfaces ─────────────────────────────────────────
+  {
+    id: "gear-wheels",
+    label: "Gear Wheels",
+    tags: ["mechanical", "interlocking", "precision"],
+    compatibleArchetypeIds: ["sequence", "routing", "cause-and-effect", "assembly"],
+    interactionVerbs: ["turn", "engage", "disengage"],
+    stateCapacity: 8,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "scales",
+    label: "Balance Scales",
+    tags: ["mechanical", "weighted", "balance"],
+    compatibleArchetypeIds: ["weight-balance", "deduction"],
+    interactionVerbs: ["place", "remove", "weigh"],
+    stateCapacity: 4,
+    supportsOrder: false,
+    supportsSimultaneousInput: true,
+  },
+  {
+    id: "dial-faces",
+    label: "Dial Faces",
+    tags: ["mechanical", "circular", "symbolic"],
+    compatibleArchetypeIds: ["elimination", "riddle-lock", "pattern-matching", "symbol-translation"],
+    interactionVerbs: ["turn", "set", "lock"],
+    stateCapacity: 12,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "crystal-lenses",
+    label: "Crystal Lenses",
+    tags: ["light", "arcane", "optical"],
+    compatibleArchetypeIds: ["alignment", "routing", "pattern-matching", "environment-manipulation"],
+    interactionVerbs: ["aim", "focus", "filter"],
+    stateCapacity: 6,
+    supportsOrder: false,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "rune-pillars",
+    label: "Rune Pillars",
+    tags: ["arcane", "stone", "monumental"],
+    compatibleArchetypeIds: ["cause-and-effect", "riddle-lock", "environment-manipulation", "sequence"],
+    interactionVerbs: ["touch", "activate", "inscribe"],
+    stateCapacity: 8,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "chain-pulleys",
+    label: "Chain & Pulley System",
+    tags: ["mechanical", "vertical", "heavy"],
+    compatibleArchetypeIds: ["sequence", "routing", "weight-balance"],
+    interactionVerbs: ["pull", "release", "lock"],
+    stateCapacity: 4,
+    supportsOrder: true,
+    supportsSimultaneousInput: true,
+  },
+  {
+    id: "mosaic-floor",
+    label: "Mosaic Floor",
+    tags: ["visual", "positional", "decorative"],
+    compatibleArchetypeIds: ["pattern-matching", "alignment", "deduction"],
+    interactionVerbs: ["step", "arrange", "trace"],
+    stateCapacity: 16,
+    supportsOrder: false,
+    supportsSimultaneousInput: true,
+  },
+  {
+    id: "braziers",
+    label: "Ritual Braziers",
+    tags: ["fire", "elemental", "ritual"],
+    compatibleArchetypeIds: ["sequence", "cause-and-effect", "assembly"],
+    interactionVerbs: ["light", "extinguish", "feed"],
+    stateCapacity: 6,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "bell-tower",
+    label: "Bell Tower Array",
+    tags: ["musical", "tonal", "vertical"],
+    compatibleArchetypeIds: ["sequence", "pattern-matching"],
+    interactionVerbs: ["ring", "silence", "tune"],
+    stateCapacity: 8,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "sand-timers",
+    label: "Sand Timers",
+    tags: ["temporal", "mechanical", "visual"],
+    compatibleArchetypeIds: ["sequence", "cause-and-effect"],
+    interactionVerbs: ["flip", "stall", "shatter"],
+    stateCapacity: 4,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
 
-  label: "Rotating Rings",
-
-  tags: ["mechanical","sigils"],
-
-  compatibleArchetypeIds: [
-    "sequence",
-    "alignment",
-    "symbol-translation"
-  ],
-
-  interactionVerbs: [
-    "rotate",
-    "align"
-  ],
-
-  stateCapacity: 8,
-
-  supportsOrder: true,
-
-  supportsSimultaneousInput: false
-},
-
-{
-  id: "levers",
-
-  label: "Lever Array",
-
-  tags: ["mechanical"],
-
-  compatibleArchetypeIds: [
-    "sequence",
-    "routing"
-  ],
-
-  interactionVerbs: [
-    "pull",
-    "reset"
-  ],
-
-  stateCapacity: 6,
-
-  supportsOrder: true,
-
-  supportsSimultaneousInput: true
-}
-
+  // ── Resource-inspired interfaces ───────────────────────────
+  {
+    id: "painting-frames",
+    label: "Painting Frames",
+    tags: ["visual", "decorative", "magical"],
+    compatibleArchetypeIds: ["pattern-matching", "deduction", "elimination", "cipher-decode"],
+    interactionVerbs: ["examine", "rearrange", "enter"],
+    stateCapacity: 8,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "floor-tiles",
+    label: "Floor Tiles",
+    tags: ["positional", "stone", "navigable"],
+    compatibleArchetypeIds: ["spatial-navigation", "pattern-matching", "alignment", "sequence"],
+    interactionVerbs: ["step", "press", "swap"],
+    stateCapacity: 16,
+    supportsOrder: true,
+    supportsSimultaneousInput: true,
+  },
+  {
+    id: "pipes-valves",
+    label: "Pipes & Valves",
+    tags: ["mechanical", "flow", "elemental"],
+    compatibleArchetypeIds: ["routing", "cooperative-lock", "cause-and-effect", "environment-manipulation"],
+    interactionVerbs: ["open", "close", "redirect"],
+    stateCapacity: 8,
+    supportsOrder: false,
+    supportsSimultaneousInput: true,
+  },
+  {
+    id: "colored-gems",
+    label: "Colored Gems",
+    tags: ["arcane", "optical", "modular"],
+    compatibleArchetypeIds: ["cipher-decode", "pattern-matching", "sequence", "trial-and-error"],
+    interactionVerbs: ["place", "press", "rotate"],
+    stateCapacity: 8,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "lock-tumblers",
+    label: "Lock Tumblers",
+    tags: ["mechanical", "precision", "binary"],
+    compatibleArchetypeIds: ["cipher-decode", "trial-and-error", "sequence", "elimination"],
+    interactionVerbs: ["turn", "set", "click"],
+    stateCapacity: 6,
+    supportsOrder: true,
+    supportsSimultaneousInput: false,
+  },
+  {
+    id: "trap-doors",
+    label: "Trap Doors",
+    tags: ["mechanical", "hidden-state", "vertical"],
+    compatibleArchetypeIds: ["spatial-navigation", "routing", "deduction"],
+    interactionVerbs: ["open", "drop", "trigger"],
+    stateCapacity: 4,
+    supportsOrder: false,
+    supportsSimultaneousInput: false,
+  },
 ];

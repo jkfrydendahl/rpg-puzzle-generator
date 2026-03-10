@@ -1,54 +1,210 @@
 /**
- * SAMPLE SEED DATA
+ * SAMPLE SEED DATA ONLY
  *
- * This file contains example entries used to establish schema,
- * compatibility rules, and generator behavior.
+ * These entries are examples used to establish schema, compatibility rules,
+ * and generator behavior. They are not intended to represent a complete
+ * production dataset.
  *
- * These entries are NOT intended to represent a complete dataset.
- *
- * The generator must treat this data as extensible. Additional
- * entries may be added later without changing generator logic.
- *
- * When generating puzzles, the system should not assume these
- * are the only possible components.
+ * Add more entries freely as long as they follow the same contracts.
  */
 
-import { PuzzleArchetype } from "../types/archetype";
+import type { PuzzleArchetype } from "../types/archetype";
 
 export const archetypes: PuzzleArchetype[] = [
   {
     id: "sequence",
-
     label: "Sequence",
-
-    description: "Players must activate elements in a specific order.",
-
-    tags: ["ordered", "ritual"],
-
-    compatibleInterfaceIds: [
-      "rotating-rings",
-      "levers",
-      "sigil-stones"
-    ],
-
-    compatibleClueTypeIds: [
-      "inscription",
-      "mural",
-      "journal-fragment"
-    ],
-
-    validTwistIds: [
-      "reversed-order",
-      "broken-component"
-    ],
-
-    preferredConsequenceIds: [
-      "reset",
-      "arcane-pulse"
-    ],
-
+    description: "Players must activate or arrange elements in the correct order.",
+    tags: ["ordered", "procedural", "ritual"],
+    compatibleInterfaceIds: ["rotating-rings", "levers", "sigil-stones", "chimes"],
+    compatibleClueTypeIds: ["inscription", "mural", "journal-fragment", "color-coding"],
+    validTwistIds: ["reversed-order", "broken-component", "delayed-feedback"],
+    preferredConsequenceIds: ["reset", "arcane-pulse", "alarm"],
     minClueCount: 2,
+    defaultStepRange: [3, 4],
+  },
+  {
+    id: "alignment",
+    label: "Alignment",
+    description: "Players must orient or position objects into the correct arrangement.",
+    tags: ["spatial", "orientation", "positioning"],
+    compatibleInterfaceIds: ["rotating-rings", "mirrors", "statues", "sliding-tiles"],
+    compatibleClueTypeIds: ["mural", "constellation-map", "environmental-pattern", "statue-pose"],
+    validTwistIds: ["locked-state", "broken-component", "missing-piece"],
+    preferredConsequenceIds: ["reset", "room-shift", "arcane-pulse"],
+    minClueCount: 2,
+    defaultStepRange: [2, 4],
+  },
+  {
+    id: "deduction",
+    label: "Deduction",
+    description: "Players infer the correct arrangement by combining multiple clues.",
+    tags: ["logic", "inference", "cross-reference"],
+    compatibleInterfaceIds: ["statues", "sigil-stones", "pressure-plates", "sliding-tiles"],
+    compatibleClueTypeIds: ["journal-fragment", "mural", "inscription", "ghost-replay"],
+    validTwistIds: ["misleading-clue", "missing-piece"],
+    preferredConsequenceIds: ["alarm", "reset"],
+    minClueCount: 3,
+    defaultStepRange: [3, 5],
+  },
+  {
+    id: "routing",
+    label: "Routing",
+    description: "Players direct energy, water, light, or force through a connected system.",
+    tags: ["flow", "network", "redirection"],
+    compatibleInterfaceIds: ["mirrors", "water-channels", "levers", "sigil-nodes"],
+    compatibleClueTypeIds: ["environmental-pattern", "mural", "inscription"],
+    validTwistIds: ["blocked-path", "broken-component", "timed-window"],
+    preferredConsequenceIds: ["flooding", "arcane-pulse", "summon-guardian"],
+    minClueCount: 2,
+    defaultStepRange: [3, 4],
+  },
+  {
+    id: "symbol-translation",
+    label: "Symbol Translation",
+    description: "Players decode symbolic meaning and apply it to a mechanism.",
+    tags: ["language", "symbolic", "interpretive"],
+    compatibleInterfaceIds: ["sigil-stones", "rotating-rings", "statues"],
+    compatibleClueTypeIds: ["inscription", "mural", "journal-fragment", "color-coding"],
+    validTwistIds: ["misleading-clue", "reversed-order"],
+    preferredConsequenceIds: ["reset", "arcane-pulse"],
+    minClueCount: 3,
+    defaultStepRange: [3, 4],
+  },
 
-    defaultStepRange: [3, 4]
-  }
+  // ── New archetypes ─────────────────────────────────────────
+  {
+    id: "pattern-matching",
+    label: "Pattern Matching",
+    description: "Players identify and reproduce a repeating pattern across elements (colours, shapes, sounds).",
+    tags: ["visual", "repetition", "observation"],
+    compatibleInterfaceIds: ["sigil-stones", "sliding-tiles", "chimes", "crystal-lenses", "rotating-rings"],
+    compatibleClueTypeIds: ["mural", "color-coding", "environmental-pattern", "mosaic-fragment", "sound-echo"],
+    validTwistIds: ["broken-component", "misleading-clue", "missing-piece"],
+    preferredConsequenceIds: ["reset", "arcane-pulse"],
+    minClueCount: 2,
+    defaultStepRange: [3, 5],
+  },
+  {
+    id: "weight-balance",
+    label: "Weight & Balance",
+    description: "Players distribute objects or forces to achieve equilibrium or a target imbalance.",
+    tags: ["physical", "quantitative", "balance"],
+    compatibleInterfaceIds: ["pressure-plates", "levers", "scales", "sliding-tiles"],
+    compatibleClueTypeIds: ["inscription", "journal-fragment", "environmental-pattern", "carved-relief"],
+    validTwistIds: ["broken-component", "missing-piece", "hidden-constraint"],
+    preferredConsequenceIds: ["reset", "flooding", "arcane-pulse"],
+    minClueCount: 2,
+    defaultStepRange: [2, 4],
+  },
+  {
+    id: "elimination",
+    label: "Elimination",
+    description: "Players narrow down possibilities by ruling out wrong answers using contextual clues.",
+    tags: ["logic", "process-of-elimination", "investigation"],
+    compatibleInterfaceIds: ["statues", "sigil-stones", "pressure-plates", "dial-faces"],
+    compatibleClueTypeIds: ["journal-fragment", "ghost-replay", "inscription", "witness-account", "carved-relief"],
+    validTwistIds: ["misleading-clue", "missing-piece", "hidden-constraint"],
+    preferredConsequenceIds: ["alarm", "arcane-pulse", "reset"],
+    minClueCount: 3,
+    defaultStepRange: [3, 5],
+  },
+  {
+    id: "cause-and-effect",
+    label: "Cause & Effect",
+    description: "Players trigger mechanisms and observe results to deduce the correct combination of actions.",
+    tags: ["experimental", "observation", "iterative"],
+    compatibleInterfaceIds: ["levers", "pressure-plates", "rotating-rings", "gear-wheels", "rune-pillars"],
+    compatibleClueTypeIds: ["environmental-pattern", "inscription", "mural", "sound-echo"],
+    validTwistIds: ["delayed-feedback", "broken-component", "timed-window"],
+    preferredConsequenceIds: ["reset", "room-shift", "arcane-pulse"],
+    minClueCount: 2,
+    defaultStepRange: [3, 4],
+  },
+  {
+    id: "riddle-lock",
+    label: "Riddle Lock",
+    description: "Players solve a verbal or conceptual riddle whose answer must be enacted physically.",
+    tags: ["verbal", "lateral-thinking", "interpretive"],
+    compatibleInterfaceIds: ["statues", "sigil-stones", "dial-faces", "rune-pillars"],
+    compatibleClueTypeIds: ["inscription", "journal-fragment", "ghost-replay", "carved-relief"],
+    validTwistIds: ["misleading-clue", "reversed-order", "hidden-constraint"],
+    preferredConsequenceIds: ["alarm", "summon-guardian", "reset"],
+    minClueCount: 2,
+    defaultStepRange: [2, 3],
+  },
+  {
+    id: "assembly",
+    label: "Assembly",
+    description: "Players gather scattered pieces and combine them in the correct arrangement to form a key, map, or device.",
+    tags: ["collection", "spatial", "reconstruction"],
+    compatibleInterfaceIds: ["sigil-stones", "sliding-tiles", "statues", "gear-wheels"],
+    compatibleClueTypeIds: ["mural", "journal-fragment", "mosaic-fragment", "environmental-pattern"],
+    validTwistIds: ["missing-piece", "broken-component", "locked-state"],
+    preferredConsequenceIds: ["reset", "arcane-pulse"],
+    minClueCount: 2,
+    defaultStepRange: [3, 5],
+  },
+  {
+    id: "environment-manipulation",
+    label: "Environment Manipulation",
+    description: "Players alter the room itself — flooding chambers, changing light levels, or shifting walls — to create a path.",
+    tags: ["environmental", "transformation", "large-scale"],
+    compatibleInterfaceIds: ["levers", "water-channels", "mirrors", "rune-pillars", "crystal-lenses"],
+    compatibleClueTypeIds: ["environmental-pattern", "mural", "inscription", "carved-relief"],
+    validTwistIds: ["blocked-path", "timed-window", "broken-component"],
+    preferredConsequenceIds: ["flooding", "room-shift", "arcane-pulse"],
+    minClueCount: 2,
+    defaultStepRange: [3, 4],
+  },
+
+  // ── Resource-inspired archetypes ───────────────────────────
+  {
+    id: "cipher-decode",
+    label: "Cipher Decode",
+    description: "Players decode encrypted messages, number sequences, or substitution ciphers to reveal critical information.",
+    tags: ["language", "encoded", "analytical"],
+    compatibleInterfaceIds: ["rotating-rings", "sigil-stones", "dial-faces", "colored-gems", "lock-tumblers"],
+    compatibleClueTypeIds: ["inscription", "journal-fragment", "coded-message", "mural"],
+    validTwistIds: ["misleading-clue", "reversed-order", "hidden-constraint"],
+    preferredConsequenceIds: ["reset", "arcane-pulse", "alarm"],
+    minClueCount: 3,
+    defaultStepRange: [3, 5],
+  },
+  {
+    id: "spatial-navigation",
+    label: "Spatial Navigation",
+    description: "Players navigate sliding tile mazes, hexagonal rooms, or shifting corridors to reach a goal.",
+    tags: ["spatial", "movement", "orientation"],
+    compatibleInterfaceIds: ["sliding-tiles", "floor-tiles", "pressure-plates", "trap-doors", "mosaic-floor"],
+    compatibleClueTypeIds: ["floor-markings", "environmental-pattern", "mural", "shadow-projection"],
+    validTwistIds: ["blocked-path", "shifting-solution", "one-way-passage"],
+    preferredConsequenceIds: ["reset", "pit-trap", "room-shift"],
+    minClueCount: 2,
+    defaultStepRange: [3, 5],
+  },
+  {
+    id: "trial-and-error",
+    label: "Trial & Error",
+    description: "Players test inputs and observe feedback to narrow down the correct solution through systematic experimentation.",
+    tags: ["experimental", "iterative", "feedback"],
+    compatibleInterfaceIds: ["levers", "dial-faces", "colored-gems", "pressure-plates", "lock-tumblers"],
+    compatibleClueTypeIds: ["environmental-pattern", "sound-echo", "temperature-gradient", "tactile-difference"],
+    validTwistIds: ["delayed-feedback", "false-solution", "cascading-failure"],
+    preferredConsequenceIds: ["reset", "arcane-pulse", "pit-trap"],
+    minClueCount: 2,
+    defaultStepRange: [3, 4],
+  },
+  {
+    id: "cooperative-lock",
+    label: "Cooperative Lock",
+    description: "Players must coordinate simultaneous actions — pulling levers together, holding positions, or synchronising inputs.",
+    tags: ["teamwork", "simultaneous", "coordination"],
+    compatibleInterfaceIds: ["levers", "chain-pulleys", "pressure-plates", "gear-wheels", "pipes-valves"],
+    compatibleClueTypeIds: ["inscription", "mechanical-diagram", "floor-markings", "carved-relief"],
+    validTwistIds: ["cooperative-input", "timed-window", "environmental-hazard"],
+    preferredConsequenceIds: ["reset", "alarm", "party-split"],
+    minClueCount: 2,
+    defaultStepRange: [2, 4],
+  },
 ];
