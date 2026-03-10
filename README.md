@@ -40,3 +40,7 @@ The generator is built in stages:
 7. Export optional AI prompt
 
 The generator should prioritize **correct puzzle logic over creative flavor**.
+
+## License
+
+[MIT](LICENSE)
