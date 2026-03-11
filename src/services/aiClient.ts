@@ -1,10 +1,11 @@
 import type { AIDecorateResponse } from "../types/ai.js";
 
-export async function decoratePuzzle(prompt: string): Promise<AIDecorateResponse> {
+export async function decoratePuzzle(prompt: string, signal?: AbortSignal): Promise<AIDecorateResponse> {
   const res = await fetch("/api/decorate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ prompt }),
+    signal,
   });
 
   if (!res.ok) {

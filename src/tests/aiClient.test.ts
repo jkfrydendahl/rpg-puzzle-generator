@@ -15,6 +15,7 @@ describe("aiClient", () => {
     const mockResponse = {
       narrative: "Ancient glyphs shimmer...",
       usage: { promptTokens: 50, completionTokens: 30, totalTokens: 80 },
+      model: "gpt-4o-mini",
     };
     mockFetch.mockResolvedValueOnce({
       ok: true,
@@ -28,6 +29,7 @@ describe("aiClient", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: "test prompt" }),
+      signal: undefined,
     });
     expect(result).toEqual(mockResponse);
   });

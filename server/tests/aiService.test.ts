@@ -23,6 +23,7 @@ describe("aiService", () => {
     const result = await generateNarrative("test prompt");
 
     expect(result.narrative).toBe("A dark chamber unfolds before you...");
+    expect(result.model).toBe("gpt-4o-mini");
     expect(result.usage).toEqual({
       promptTokens: 100,
       completionTokens: 50,

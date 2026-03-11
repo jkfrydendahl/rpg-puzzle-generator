@@ -4,7 +4,6 @@ import { generatePuzzle } from "./lib/generatePuzzle.js";
 import { exportPrompt } from "./lib/exportPrompt.js";
 import { scorePuzzle } from "./lib/scorePuzzle.js";
 import type { PuzzleDifficulty, PuzzleSeed } from "./types/puzzle.js";
-import OpenAI from "openai";
 
 // ── Parse CLI arguments ──────────────────────────────────────
 const args = process.argv.slice(2);
@@ -118,11 +117,23 @@ if (config.aiMode) {
   }
   const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
   const prompt = exportPrompt(puzzle);
-  const client = new OpenAI({ apiKey });
-  client.chat.completions
-    .create({
-      model,
-      messages: [{ role: "user", content: prompt }],
+  import("openai")
+    .then(({ default: OpenAI }) => {
+      const client = new OpenAI({ apiKey, timeout: 30_000 });
+      return client.chat.completions.create({
+        model,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a creative writing assistant for tabletop RPGs. " +
+              "Generate only narrative flavor text that decorates the given puzzle. " +
+              "Do not include executable code, URLs, or harmful content.",
+          },
+          { role: "user", content: prompt },
+        ],
+        max_completion_tokens: 2048,
+      });
     })
     .then((response) => {
       const narrative = response.choices[0]?.message?.content ?? "";

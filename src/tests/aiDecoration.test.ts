@@ -9,6 +9,7 @@ function makeResponse(narrative = "A decorated tale"): AIDecorateResponse {
   return {
     narrative,
     usage: { promptTokens: 10, completionTokens: 20, totalTokens: 30 },
+    model: "gpt-4o-mini",
   };
 }
 
@@ -127,11 +128,10 @@ describe("createAIDecoration", () => {
     await decorate("test prompt");
 
     expect(onUsage).toHaveBeenCalledOnce();
-    expect(onUsage).toHaveBeenCalledWith({
-      promptTokens: 10,
-      completionTokens: 20,
-      totalTokens: 30,
-    });
+    expect(onUsage).toHaveBeenCalledWith(
+      { promptTokens: 10, completionTokens: 20, totalTokens: 30 },
+      "gpt-4o-mini",
+    );
   });
 
   it("does not call onUsage on failure", async () => {

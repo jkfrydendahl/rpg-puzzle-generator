@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { GeneratedPuzzle } from "../../types/puzzle.js";
 
 type Props = {
@@ -6,33 +7,25 @@ type Props = {
 };
 
 export function MechanicalDetails({ puzzle, hasNarrative }: Props) {
+  const [open, setOpen] = useState(false);
+
   if (!hasNarrative) {
     return <div className="mechanical-details">{renderContent(puzzle)}</div>;
   }
 
   return (
-    <fieldset className="mechanical-details" role="group">
+    <fieldset className="mechanical-details" role="group" {...(open ? { open: "" } : {})}>
       <legend>
         <button
           className="collapse-toggle"
           type="button"
-          aria-expanded="false"
-          onClick={(e) => {
-            const fieldset = e.currentTarget.closest("fieldset")!;
-            const isOpen = fieldset.hasAttribute("open");
-            if (isOpen) {
-              fieldset.removeAttribute("open");
-              e.currentTarget.setAttribute("aria-expanded", "false");
-            } else {
-              fieldset.setAttribute("open", "");
-              e.currentTarget.setAttribute("aria-expanded", "true");
-            }
-          }}
+          aria-expanded={open}
+          onClick={() => setOpen((prev) => !prev)}
         >
           Mechanical Details
         </button>
       </legend>
-      <div className="mechanical-content">{renderContent(puzzle)}</div>
+      {open && <div className="mechanical-content">{renderContent(puzzle)}</div>}
     </fieldset>
   );
 }

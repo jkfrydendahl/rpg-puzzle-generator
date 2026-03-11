@@ -13,4 +13,5 @@ export type AIUsage = {
 export type AIDecorateResponse = {
   narrative: string;
   usage: AIUsage;
+  model: string;
 };

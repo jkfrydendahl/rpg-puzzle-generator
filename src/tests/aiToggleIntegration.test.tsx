@@ -10,7 +10,10 @@ import userEvent from "@testing-library/user-event";
 // - S17: AI enabled + generate → decoration is invoked
 // - S18: AI disabled + generate → decoration is NOT invoked
 
-describe("AI toggle integration", () => {
+// Behavioral test for the AI toggle orchestration logic.
+// Validates that the generate → decorate call sequence respects the aiEnabled flag
+// without rendering the full page component tree (covered by E2E tests).
+describe("AI toggle orchestration logic", () => {
   afterEach(cleanup);
 
   it("AI toggle on → generate calls decoration automatically (S17)", async () => {

@@ -27,6 +27,9 @@ export function NarrativeDisplay({ narrative, loading, error }: Props) {
 
   if (!narrative) return null;
 
+  // SAFETY: narrative is AI-generated external content.
+  // Always render as text content (React auto-escapes).
+  // Never use dangerouslySetInnerHTML or a Markdown/HTML renderer here.
   function handleCopy() {
     navigator.clipboard.writeText(narrative!).then(
       () => {

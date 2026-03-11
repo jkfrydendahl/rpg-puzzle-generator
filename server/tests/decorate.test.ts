@@ -26,6 +26,7 @@ describe("POST /api/decorate", () => {
     mock.mockResolvedValueOnce({
       narrative: "The chamber glows with ancient runes...",
       usage: { promptTokens: 80, completionTokens: 40, totalTokens: 120 },
+      model: "gpt-4o-mini",
     });
 
     const app = buildApp();
@@ -62,6 +63,15 @@ describe("POST /api/decorate", () => {
 
     expect(res.status).toBe(500);
     expect(res.body.error).toMatch(/AI decoration failed/);
+  });
+
+  it("rejects prompt exceeding max length with 400", async () => {
+    const app = buildApp();
+    const longPrompt = "x".repeat(9000);
+    const res = await makeRequest(app, { prompt: longPrompt });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toMatch(/exceeds maximum length/);
   });
 });
 
