@@ -8,6 +8,7 @@ export type GeneratorSettings = {
   requiredTags: string;
   excludedTags: string;
   rngSeed: string;
+  aiEnabled: boolean;
 };
 
 const STORAGE_KEY = "rpg-puzzle-settings";
@@ -19,6 +20,7 @@ const defaultSettings: GeneratorSettings = {
   requiredTags: "",
   excludedTags: "",
   rngSeed: "",
+  aiEnabled: false,
 };
 
 function loadSettings(): GeneratorSettings {
