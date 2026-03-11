@@ -38,6 +38,7 @@ OPENAI_API_KEY=sk-... node dist/cli.js --ai
 | `--seed <number>` | RNG seed for reproducible output |
 | `--prompt` | Output AI decoration prompt instead of JSON |
 | `--ai` | Decorate puzzle with AI narrative (requires `OPENAI_API_KEY`) |
+| `--help`, `-h` | Show help message |
 
 ### Web UI
 
@@ -48,7 +49,13 @@ npm run dev
 npx tsx server/index.ts
 ```
 
-The web UI provides a 3-column layout with controls, puzzle display, and diagnostics. When AI is enabled, puzzles are automatically decorated with narrative text after generation.
+The web UI provides a 3-column layout:
+
+- **Controls sidebar** — difficulty, environment, archetype filter, tags, seed, AI toggle, generate/reset buttons. Settings persist in localStorage.
+- **Puzzle display** — shows the generated puzzle with copy-to-clipboard. When AI is enabled, the AI narrative appears in a collapsible section with safe markdown rendering, and the raw mechanical details collapse behind a toggle below it.
+- **Diagnostics sidebar** — puzzle quality score (0–100 across 5 dimensions), validation status, and AI usage tracking (tokens and estimated cost per session).
+
+When AI is enabled, puzzles are automatically decorated with narrative text after generation.
 
 ### AI Narrative Decoration
 
@@ -67,6 +74,30 @@ cp .env.example .env
 | `PORT` | `3001` | Express server port |
 
 **Server hardening:** The API endpoint includes a 16 KB body limit, 8,000 character prompt cap, rate limiting (20 requests/minute per IP), and a system prompt that constrains output to narrative flavor text only.
+
+## Puzzle Quality Scoring
+
+Every generated puzzle is scored 0–100 across five weighted dimensions:
+
+| Dimension | Weight | What it measures |
+|-----------|--------|------------------|
+| Solvability | 30% | Is the puzzle solvable (binary 0 or 100) |
+| Clue Coverage | 25% | Fraction of solution steps supported by clues |
+| Difficulty Fit | 20% | How well step/clue/twist counts match the difficulty profile |
+| Tension Balance | 15% | Presence of consequences, failure signals, and partial progress |
+| GM Usability | 10% | Objective, internal logic, 3+ hints, and pacing advice |
+
+The generator uses **targeted repair** instead of full rerolls — if a puzzle fails validation, only the broken part is replaced (up to N retries) before falling back to regeneration.
+
+## Docker Support
+
+Run tests in a container:
+
+```bash
+docker compose -f docker/docker-compose.test.yml run --rm test
+```
+
+See `docker/examples/` for CI/CD pipeline templates (Node, .NET, Go, Python, AL/BC).
 
 ## Core Design Principles
 
@@ -95,11 +126,13 @@ Every generated puzzle contains:
 ## Development
 
 ```bash
-npm test          # Run all tests (Vitest)
+npm test          # Run all tests (Vitest, ~400 tests)
 npm run test:watch # Watch mode
 npm run build     # TypeScript compile
 npm run dev       # Vite dev server
 npm run build:web # Production web build
+npm run preview   # Preview production build
+npm start         # Run CLI (node dist/cli.js)
 ```
 
 ### Project Structure
@@ -107,21 +140,62 @@ npm run build:web # Production web build
 ```
 src/
   cli.ts                 # CLI entry point
-  lib/                   # Core generator logic
+  App.tsx / App.css      # React app shell and styles
+  main.tsx / index.css   # Vite entry point
+  lib/
+    generatePuzzle.ts    # Main puzzle generation orchestrator
+    scorePuzzle.ts       # 5-dimension quality scoring (0–100)
+    validatePuzzle.ts    # Solvability and clue-coverage validation
+    rerollInvalidParts.ts # Targeted repair of invalid puzzle parts
+    buildSolutionPath.ts # Step-by-step solution generation
+    buildClueSet.ts      # Clue assembly
+    buildHintLadder.ts   # Progressive hint ladder
+    buildFailureState.ts # Failure/consequence state construction
+    selectArchetype.ts   # Archetype selection with filter matching
+    selectComponents.ts  # Component selection (interface, twist, etc.)
+    exportPrompt.ts      # AI decoration prompt export
+    random.ts            # Seeded RNG utility
   types/                 # TypeScript type definitions
   data/                  # Seed data (archetypes, clues, twists, etc.)
-  components/            # React UI components
-  hooks/                 # React hooks (AI decoration, usage tracking, settings)
-  services/              # Client-side API abstraction
-  pages/                 # Page components
-  tests/                 # Test files
+  components/
+    controls/
+      ControlsPanel.tsx  # Settings sidebar
+    puzzle/
+      PuzzleDisplay.tsx  # Main puzzle output with copy buttons
+      NarrativeDisplay.tsx # AI narrative with collapsible toggle + copy
+      MechanicalDetails.tsx # Raw puzzle data (collapses when narrative active)
+      DiagnosticsPanel.tsx  # Score breakdown, validation, AI usage stats
+  hooks/
+    useAIDecoration.ts      # AI decoration state machine (loading/error/result)
+    useAIUsageHistory.ts    # Cumulative token/cost tracking in localStorage
+    useGeneratorSettings.ts # Settings persistence in localStorage
+  services/
+    aiClient.ts          # Client-side fetch wrapper for /api/decorate
+  pages/
+    HomePage.tsx         # Main page orchestrating all components
+  tests/                 # 18 test files (~400 tests)
 server/
-  index.ts               # Express server
+  index.ts               # Express server (body limit, rate limiting)
   config.ts              # Environment configuration
   routes/decorate.ts     # POST /api/decorate endpoint
   services/aiService.ts  # OpenAI wrapper
-  tests/                 # Server-side tests
+  tests/                 # 3 server-side test files
+docker/
+  docker-compose.test.yml # Containerized test runner (node:20-alpine)
+  examples/              # CI/CD examples (Node, .NET, Go, Python, AL/BC)
+public/
+  d20.svg                # App icon
 ```
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| UI | React 19, Vite 5 |
+| Server | Express 5, Node.js |
+| AI | OpenAI SDK 6 (`gpt-4o-mini` default) |
+| Tests | Vitest, Testing Library, jsdom |
+| Language | TypeScript 5.4+ |
 
 ## License
 
