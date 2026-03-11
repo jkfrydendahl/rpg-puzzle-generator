@@ -1,9 +1,13 @@
 import type { PuzzleScore } from "../../lib/scorePuzzle.js";
 import type { GeneratedPuzzle } from "../../types/puzzle.js";
+import type { AIUsage } from "../../types/ai.js";
+import type { UsageSummary } from "../../hooks/useAIUsageHistory.js";
 
 type Props = {
   puzzle: GeneratedPuzzle | null;
   score: PuzzleScore | null;
+  currentAIUsage?: AIUsage | null;
+  usageSummary?: UsageSummary | null;
 };
 
 const dimensionLabels: Record<string, string> = {
@@ -14,7 +18,7 @@ const dimensionLabels: Record<string, string> = {
   gmUsability: "GM Usability",
 };
 
-export function DiagnosticsPanel({ puzzle, score }: Props) {
+export function DiagnosticsPanel({ puzzle, score, currentAIUsage, usageSummary }: Props) {
   if (!puzzle || !score) {
     return (
       <aside className="diagnostics-panel empty">
@@ -106,6 +110,31 @@ export function DiagnosticsPanel({ puzzle, score }: Props) {
         <div className="validation-item">
           <span className="field-label">Twist:</span> {puzzle.twist.type}
         </div>
+      )}
+
+      {/* AI Usage */}
+      {currentAIUsage && (
+        <>
+          <h3>AI Token Usage</h3>
+          <div className="validation-item">
+            <span className="field-label">Prompt:</span> {currentAIUsage.promptTokens}
+          </div>
+          <div className="validation-item">
+            <span className="field-label">Completion:</span> {currentAIUsage.completionTokens}
+          </div>
+          <div className="validation-item">
+            <span className="field-label">Total:</span> {currentAIUsage.totalTokens}
+          </div>
+        </>
+      )}
+
+      {usageSummary && usageSummary.generationCount > 0 && (
+        <>
+          <h3>Session Cost</h3>
+          <div className="validation-item">
+            {usageSummary.generationCount} generations — ${usageSummary.estimatedCost.toFixed(4)}
+          </div>
+        </>
       )}
     </aside>
   );
