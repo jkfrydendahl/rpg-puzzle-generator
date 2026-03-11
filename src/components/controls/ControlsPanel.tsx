@@ -87,6 +87,15 @@ export function ControlsPanel({ settings, onUpdate, onGenerate, onReset, generat
         />
       </label>
 
+      <label className="toggle-label">
+        <input
+          type="checkbox"
+          checked={settings.aiEnabled}
+          onChange={(e) => onUpdate("aiEnabled", e.target.checked)}
+        />
+        AI Narrative Decoration
+      </label>
+
       <button className="generate-button" onClick={onGenerate} disabled={generating}>
         {generating ? "Generating…" : "Generate Puzzle"}
       </button>

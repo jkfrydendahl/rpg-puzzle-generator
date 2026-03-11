@@ -4,6 +4,7 @@ import { generatePuzzle } from "./lib/generatePuzzle.js";
 import { exportPrompt } from "./lib/exportPrompt.js";
 import { scorePuzzle } from "./lib/scorePuzzle.js";
 import type { PuzzleDifficulty, PuzzleSeed } from "./types/puzzle.js";
+import OpenAI from "openai";
 
 // ── Parse CLI arguments ──────────────────────────────────────
 const args = process.argv.slice(2);
@@ -22,6 +23,7 @@ Options:
   --exclude <tag1,tag2,...>         Excluded tags (comma-separated)
   --seed <number>                   RNG seed for reproducible output
   --prompt                          Output AI decoration prompt instead of JSON
+  --ai                              Decorate puzzle with AI narrative (requires OPENAI_API_KEY)
   --help                            Show this help message
 `);
 }
@@ -33,10 +35,12 @@ function parseArgs(argv: string[]): {
   excludedTags?: string[];
   rngSeed?: number;
   promptMode: boolean;
+  aiMode: boolean;
 } {
   const result: ReturnType<typeof parseArgs> = {
     difficulty: "medium",
     promptMode: false,
+    aiMode: false,
   };
 
   for (let i = 0; i < argv.length; i++) {
@@ -79,6 +83,9 @@ function parseArgs(argv: string[]): {
       case "--prompt":
         result.promptMode = true;
         break;
+      case "--ai":
+        result.aiMode = true;
+        break;
       default:
         console.error(`Unknown option: ${arg}`);
         printUsage();
@@ -103,7 +110,37 @@ const puzzle = generatePuzzle({
   rngSeed: config.rngSeed,
 });
 
-if (config.promptMode) {
+if (config.aiMode) {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    console.error("OPENAI_API_KEY environment variable is required for --ai mode.");
+    process.exit(1);
+  }
+  const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
+  const prompt = exportPrompt(puzzle);
+  const client = new OpenAI({ apiKey });
+  client.chat.completions
+    .create({
+      model,
+      messages: [{ role: "user", content: prompt }],
+    })
+    .then((response) => {
+      const narrative = response.choices[0]?.message?.content ?? "";
+      console.log(narrative);
+      const usage = response.usage;
+      if (usage) {
+        console.log();
+        console.log(
+          `[tokens: ${usage.prompt_tokens} in / ${usage.completion_tokens} out / ${usage.total_tokens} total | model: ${model}]`,
+        );
+      }
+    })
+    .catch((err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`AI decoration failed: ${msg}`);
+      process.exit(1);
+    });
+} else if (config.promptMode) {
   console.log(exportPrompt(puzzle));
 } else {
   const score = scorePuzzle(puzzle);
