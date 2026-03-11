@@ -31,6 +31,8 @@
 
 .app-layout > main {
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 1024px) {
@@ -657,12 +659,19 @@
 }
 
 /* Cap narrative content so the Mechanical Details toggle stays on screen */
+.mechanical-details.has-narrative > .section-collapsible {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .mechanical-details.has-narrative > .section-collapsible > .section-collapsible-content {
   display: flex;
   flex-direction: column;
   padding-bottom: 2rem;
-  min-height: calc(100vh - 10rem);
-  max-height: calc(100vh - 10rem);
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 
   /* Firefox */
@@ -695,6 +704,10 @@
 
 .mechanical-details.has-narrative {
   padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .mechanical-toggle {
