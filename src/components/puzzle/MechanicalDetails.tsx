@@ -1,20 +1,22 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import type { GeneratedPuzzle } from "../../types/puzzle.js";
 
 type Props = {
   puzzle: GeneratedPuzzle;
   hasNarrative: boolean;
+  narrativeSlot?: ReactNode;
 };
 
-export function MechanicalDetails({ puzzle, hasNarrative }: Props) {
+export function MechanicalDetails({ puzzle, hasNarrative, narrativeSlot }: Props) {
   const [open, setOpen] = useState(false);
 
-  if (!hasNarrative) {
+  if (!hasNarrative && !narrativeSlot) {
     return <div className="mechanical-details">{renderContent(puzzle)}</div>;
   }
 
   return (
-    <div className="mechanical-details collapsible" role="group" {...(open ? { open: "" } : {})}>
+    <div className="mechanical-details has-narrative" role="group" {...(open ? { open: "" } : {})}>
+      {narrativeSlot && <div className="mechanical-narrative">{narrativeSlot}</div>}
       <button
         className="mechanical-toggle"
         type="button"
