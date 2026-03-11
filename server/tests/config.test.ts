@@ -4,8 +4,7 @@ describe("server config", () => {
   const originalEnv = { ...process.env };
 
   beforeEach(() => {
-    // Clear cached modules so getConfig re-reads env
-    delete require.cache;
+    // getConfig reads process.env on each call — no cache clearing needed
   });
 
   afterEach(() => {

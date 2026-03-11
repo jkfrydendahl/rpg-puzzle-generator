@@ -9,13 +9,14 @@ describe("Boundary: very long prompt", () => {
     const fetchFn = vi.fn().mockResolvedValue({
       narrative: "Long narrative response",
       usage: { promptTokens: 5000, completionTokens: 500, totalTokens: 5500 },
+      model: "gpt-4o-mini",
     } satisfies AIDecorateResponse);
 
     const { decorate } = createAIDecoration(fetchFn, (s) => states.push({ ...s }));
 
     await decorate(longPrompt);
 
-    expect(fetchFn).toHaveBeenCalledWith(longPrompt);
+    expect(fetchFn).toHaveBeenCalledWith(longPrompt, expect.anything());
     expect(states[states.length - 1].narrative).toBe("Long narrative response");
     expect(states[states.length - 1].error).toBeNull();
   });

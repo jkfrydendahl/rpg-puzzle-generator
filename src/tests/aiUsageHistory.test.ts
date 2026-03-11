@@ -23,18 +23,18 @@ describe("AIUsageHistory", () => {
     const tracker = createUsageTracker();
 
     const usage: AIUsage = { promptTokens: 100, completionTokens: 50, totalTokens: 150 };
-    tracker.record(usage);
+    tracker.record(usage, "gpt-4o-mini");
 
     expect(tracker.getEntries()).toHaveLength(1);
-    expect(tracker.getEntries()[0]).toEqual(usage);
+    expect(tracker.getEntries()[0]).toMatchObject(usage);
   });
 
   it("computes cumulative tokens and estimated cost (S14)", async () => {
     const { createUsageTracker } = await import("../hooks/useAIUsageHistory.js");
     const tracker = createUsageTracker();
 
-    tracker.record({ promptTokens: 100, completionTokens: 50, totalTokens: 150 });
-    tracker.record({ promptTokens: 200, completionTokens: 100, totalTokens: 300 });
+    tracker.record({ promptTokens: 100, completionTokens: 50, totalTokens: 150 }, "gpt-4o-mini");
+    tracker.record({ promptTokens: 200, completionTokens: 100, totalTokens: 300 }, "gpt-4o-mini");
 
     const summary = tracker.getSummary();
     expect(summary.totalTokens).toBe(450);
@@ -48,7 +48,7 @@ describe("AIUsageHistory", () => {
     const { createUsageTracker } = await import("../hooks/useAIUsageHistory.js");
     const tracker = createUsageTracker();
 
-    tracker.record({ promptTokens: 50, completionTokens: 25, totalTokens: 75 });
+    tracker.record({ promptTokens: 50, completionTokens: 25, totalTokens: 75 }, "gpt-4o-mini");
 
     expect(mockSessionStorage.setItem).toHaveBeenCalled();
     // Verify a new tracker reads from storage
@@ -60,11 +60,28 @@ describe("AIUsageHistory", () => {
     const { createUsageTracker } = await import("../hooks/useAIUsageHistory.js");
     const tracker = createUsageTracker();
 
-    tracker.record({ promptTokens: 0, completionTokens: 0, totalTokens: 0 });
+    tracker.record({ promptTokens: 0, completionTokens: 0, totalTokens: 0 }, "gpt-4o-mini");
 
     const summary = tracker.getSummary();
     expect(summary.totalTokens).toBe(0);
     expect(summary.estimatedCost).toBe(0);
     expect(summary.generationCount).toBe(1);
+  });
+
+  it("ignores corrupt sessionStorage entries", async () => {
+    // Inject corrupt data directly into storage
+    store["rpg-puzzle-ai-usage"] = JSON.stringify([
+      { promptTokens: 100, completionTokens: 50, totalTokens: 150, model: "gpt-4o-mini" },
+      "not-an-object",
+      { broken: true },
+      null,
+    ]);
+
+    const { createUsageTracker } = await import("../hooks/useAIUsageHistory.js");
+    const tracker = createUsageTracker();
+
+    // Only the first valid entry should survive
+    expect(tracker.getEntries()).toHaveLength(1);
+    expect(tracker.getSummary().totalTokens).toBe(150);
   });
 });

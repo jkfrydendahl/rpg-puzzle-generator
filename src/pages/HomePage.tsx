@@ -45,9 +45,9 @@ export function HomePage() {
         setAiLoading(state.loading);
         setAiError(state.error);
       },
-      (usage) => {
+      (usage, model) => {
         setCurrentAIUsage(usage);
-        usageTracker.current.record(usage);
+        usageTracker.current.record(usage, model);
       },
     ),
   );
@@ -65,8 +65,8 @@ export function HomePage() {
           difficulty: settings.difficulty,
           environment: settings.environment || undefined,
           archetypeId: settings.archetypeFilter || undefined,
-          requiredTags: parseTags(settings.requiredTags) || undefined,
-          excludedTags: parseTags(settings.excludedTags) || undefined,
+          requiredTags: parseTags(settings.requiredTags).length ? parseTags(settings.requiredTags) : undefined,
+          excludedTags: parseTags(settings.excludedTags).length ? parseTags(settings.excludedTags) : undefined,
         },
         rngSeed: rngSeed,
       });

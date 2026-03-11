@@ -5,9 +5,14 @@ import { getConfig } from "./config.js";
 import { decorateRoute } from "./routes/decorate.js";
 
 const config = getConfig();
+
+if (!config.apiKey) {
+  console.warn("⚠ OPENAI_API_KEY not set — AI decoration will fail");
+}
+
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "16kb" }));
 app.use("/api/decorate", decorateRoute);
 
 // In production, serve the Vite-built static files

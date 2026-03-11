@@ -10,6 +10,18 @@ const PRICING: Record<string, { input: number; output: number }> = {
 
 const DEFAULT_PRICING = PRICING["gpt-4o-mini"];
 
+type UsageEntry = AIUsage & { model?: string };
+
+function isValidEntry(e: unknown): e is UsageEntry {
+  return (
+    typeof e === "object" &&
+    e !== null &&
+    typeof (e as UsageEntry).promptTokens === "number" &&
+    typeof (e as UsageEntry).completionTokens === "number" &&
+    typeof (e as UsageEntry).totalTokens === "number"
+  );
+}
+
 export type UsageSummary = {
   totalPromptTokens: number;
   totalCompletionTokens: number;
@@ -18,29 +30,30 @@ export type UsageSummary = {
   generationCount: number;
 };
 
-export function createUsageTracker(model = "gpt-4o-mini") {
-  const pricing = PRICING[model] ?? DEFAULT_PRICING;
-
-  function loadEntries(): AIUsage[] {
+export function createUsageTracker() {
+  function loadEntries(): UsageEntry[] {
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
+      if (!raw) return [];
+      const parsed: unknown = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter(isValidEntry);
     } catch {
       return [];
     }
   }
 
-  function saveEntries(entries: AIUsage[]): void {
+  function saveEntries(entries: UsageEntry[]): void {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   }
 
-  function record(usage: AIUsage): void {
+  function record(usage: AIUsage, model?: string): void {
     const entries = loadEntries();
-    entries.push(usage);
+    entries.push({ ...usage, model });
     saveEntries(entries);
   }
 
-  function getEntries(): AIUsage[] {
+  function getEntries(): UsageEntry[] {
     return loadEntries();
   }
 
@@ -49,16 +62,17 @@ export function createUsageTracker(model = "gpt-4o-mini") {
     let totalPromptTokens = 0;
     let totalCompletionTokens = 0;
     let totalTokens = 0;
+    let estimatedCost = 0;
 
     for (const e of entries) {
       totalPromptTokens += e.promptTokens;
       totalCompletionTokens += e.completionTokens;
       totalTokens += e.totalTokens;
+      const pricing = (e.model ? PRICING[e.model] : undefined) ?? DEFAULT_PRICING;
+      estimatedCost +=
+        e.promptTokens * pricing.input +
+        e.completionTokens * pricing.output;
     }
-
-    const estimatedCost =
-      totalPromptTokens * pricing.input +
-      totalCompletionTokens * pricing.output;
 
     return {
       totalPromptTokens,
