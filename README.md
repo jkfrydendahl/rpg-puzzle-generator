@@ -1,6 +1,6 @@
 # RPG Puzzle Generator
 
-A **logic-first puzzle generator** for tabletop RPGs. Creates structured puzzle packets that GMs can use at the table — with optional AI narrative decoration via OpenAI.
+A **logic-first puzzle generator** for tabletop RPGs. Creates structured puzzle packets that GMs can use at the table, with optional AI narrative decoration via OpenAI.
 
 Puzzle logic is always generated before flavor text. The core generator produces solvable puzzle structures; the AI layer adds atmospheric descriptions on top.
 
@@ -52,7 +52,8 @@ The web UI provides a 3-column layout with controls, puzzle display, and diagnos
 
 ### AI Narrative Decoration
 
-The AI layer sends the generated puzzle structure to OpenAI and returns atmospheric narrative text. It requires an API key:
+The AI layer sends the generated puzzle structure to OpenAI and returns atmospheric narrative text. 
+It requires an API key:
 
 ```bash
 cp .env.example .env
@@ -61,7 +62,7 @@ cp .env.example .env
 
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
-| `OPENAI_API_KEY` | — | Required for AI decoration |
+| `OPENAI_API_KEY` | N/A | Required for AI decoration |
 | `OPENAI_MODEL` | `gpt-4o-mini` | OpenAI model to use |
 | `PORT` | `3001` | Express server port |
 
@@ -74,7 +75,7 @@ cp .env.example .env
 3. Archetype compatibility determines valid puzzle structures
 4. Difficulty constrains complexity
 5. Generated output should be **GM-usable without modification**
-6. **Logic before flavor** — AI decoration is always optional
+6. **Logic before flavor** -- AI decoration is always optional
 
 ## Puzzle Structure
 
