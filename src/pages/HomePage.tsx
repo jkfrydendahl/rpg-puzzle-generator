@@ -56,6 +56,7 @@ export function HomePage() {
     setGenerating(true);
     setError(null);
     setCurrentAIUsage(null);
+    aiDecorationRef.current.clearNarrative();
 
     try {
       const rngSeed = settings.rngSeed ? Number(settings.rngSeed) : undefined;
