@@ -5,10 +5,19 @@ type Props = {
   puzzle: GeneratedPuzzle;
   hasNarrative: boolean;
   narrativeSlot?: ReactNode;
+  promptText: string;
 };
 
-export function MechanicalDetails({ puzzle, hasNarrative, narrativeSlot }: Props) {
+export function MechanicalDetails({ puzzle, hasNarrative, narrativeSlot, promptText }: Props) {
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  function copyText(text: string, label: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(label);
+      setTimeout(() => setCopied(null), 1500);
+    });
+  }
 
   if (!hasNarrative && !narrativeSlot) {
     return <div className="mechanical-details">{renderContent(puzzle)}</div>;
@@ -26,9 +35,63 @@ export function MechanicalDetails({ puzzle, hasNarrative, narrativeSlot }: Props
         <span className="mechanical-toggle-icon">{open ? "▾" : "▸"}</span>
         Mechanical Details
       </button>
-      {open && <div className="section-collapsible-content">{renderContent(puzzle)}</div>}
+      {open && (
+        <div className="section-collapsible-content">
+          {renderContent(puzzle)}
+          <div className="puzzle-actions">
+            <button className="copy-button" onClick={() => copyText(puzzleToText(puzzle), "puzzle")}>
+              {copied === "puzzle" ? "Copied!" : "Copy Puzzle"}
+            </button>
+            <button className="copy-prompt-button" onClick={() => copyText(promptText, "prompt")}>
+              {copied === "prompt" ? "Copied!" : "Copy AI Prompt"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
+}
+
+function puzzleToText(puzzle: GeneratedPuzzle): string {
+  const lines: string[] = [
+    `# ${puzzle.archetype} — ${puzzle.difficulty}`,
+    puzzle.environment ? `Environment: ${puzzle.environment}` : "",
+    `Tags: ${puzzle.tags.join(", ")}`,
+    "",
+    `## Interface`,
+    `Primary: ${puzzle.interface.primary.join(", ")}`,
+    puzzle.interface.secondary?.length
+      ? `Secondary: ${puzzle.interface.secondary.join(", ")}`
+      : "",
+    "",
+    `## Solution`,
+    `Objective: ${puzzle.solution.objective}`,
+    ...puzzle.solution.steps.map((s, i) => `  ${i + 1}. ${s}`),
+    `Final state: ${puzzle.solution.finalState}`,
+    `Logic: ${puzzle.solution.internalLogic}`,
+    "",
+    `## Clues`,
+    ...puzzle.clues.map(
+      (c) => `- [${c.directness}] ${c.source}: ${c.content} → ${c.pointsTo.join(", ")}`,
+    ),
+    "",
+  ];
+  if (puzzle.twist) {
+    lines.push(`## Twist`, `${puzzle.twist.type}: ${puzzle.twist.effect}`, "");
+  }
+  lines.push(
+    `## Consequence`,
+    `${puzzle.consequence.type} (${puzzle.consequence.severity}): ${puzzle.consequence.behavior}`,
+    "",
+    `## Hints`,
+    ...puzzle.hints.map((h, i) => `  ${i + 1}. ${h}`),
+    "",
+    `## GM Notes`,
+    `Pacing: ${puzzle.gmNotes.pacingAdvice}`,
+    ...puzzle.gmNotes.likelyMisreads.map((m) => `Misread: ${m}`),
+    ...puzzle.gmNotes.bypassIdeas.map((b) => `Bypass: ${b}`),
+  );
+  return lines.filter((l) => l !== undefined).join("\n");
 }
 
 function renderContent(puzzle: GeneratedPuzzle) {

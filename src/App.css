@@ -660,6 +660,7 @@
 .mechanical-details.has-narrative > .section-collapsible > .section-collapsible-content {
   display: flex;
   flex-direction: column;
+  padding-bottom: 2rem;
   min-height: calc(100vh - 10rem);
   max-height: calc(100vh - 10rem);
   overflow-y: auto;

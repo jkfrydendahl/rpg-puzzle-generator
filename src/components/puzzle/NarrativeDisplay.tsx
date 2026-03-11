@@ -7,14 +7,18 @@ type Props = {
 };
 
 /** Parse AI markdown into simple block elements for safe rendering. */
-function parseNarrativeBlocks(text: string): { type: "heading" | "paragraph"; content: string }[] {
-  const blocks: { type: "heading" | "paragraph"; content: string }[] = [];
+function parseNarrativeBlocks(text: string): { type: "heading" | "paragraph" | "ordered-list"; content: string; items?: string[] }[] {
+  const blocks: { type: "heading" | "paragraph" | "ordered-list"; content: string; items?: string[] }[] = [];
   for (const raw of text.split(/\n{2,}/)) {
     const line = raw.trim();
     if (!line) continue;
     const headingMatch = line.match(/^#{1,3}\s+(.+)$/m);
     if (headingMatch) {
       blocks.push({ type: "heading", content: headingMatch[1] });
+    } else if (/^\d+\.\s/.test(line)) {
+      // Ordered list: split on line-initial numbers
+      const items = line.split(/\n/).map((l) => l.replace(/^\d+\.\s*/, "").replace(/\*\*(.+?)\*\*/g, "$1").trim()).filter(Boolean);
+      blocks.push({ type: "ordered-list", content: "", items });
     } else {
       // Collapse single newlines within a paragraph and strip bold markers
       const cleaned = line.replace(/\n/g, " ").replace(/\*\*(.+?)\*\*/g, "$1");
@@ -80,6 +84,12 @@ export function NarrativeDisplay({ narrative, loading, error }: Props) {
               {blocks.map((block, i) =>
                 block.type === "heading" ? (
                   <h4 key={i} className="narrative-heading">{block.content}</h4>
+                ) : block.type === "ordered-list" ? (
+                  <ol key={i}>
+                    {block.items!.map((item, j) => (
+                      <li key={j}>{item}</li>
+                    ))}
+                  </ol>
                 ) : (
                   <p key={i}>{block.content}</p>
                 ),

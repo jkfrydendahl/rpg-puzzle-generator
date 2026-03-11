@@ -121,6 +121,7 @@ export function HomePage() {
             <MechanicalDetails
               puzzle={puzzle}
               hasNarrative={narrative !== null}
+              promptText={promptText}
               narrativeSlot={
                 <NarrativeDisplay
                   narrative={narrative}
