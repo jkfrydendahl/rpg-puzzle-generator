@@ -28,10 +28,13 @@ export function NarrativeDisplay({ narrative, loading, error }: Props) {
   if (!narrative) return null;
 
   function handleCopy() {
-    navigator.clipboard.writeText(narrative!).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    });
+    navigator.clipboard.writeText(narrative!).then(
+      () => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      },
+      () => { /* clipboard denied — ignore gracefully */ },
+    );
   }
 
   return (

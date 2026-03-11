@@ -117,4 +117,31 @@ describe("createAIDecoration", () => {
     const last = states[states.length - 1];
     expect(last).toEqual({ narrative: null, loading: false, error: null });
   });
+
+  it("calls onUsage callback with usage data on success", async () => {
+    const onUsage = vi.fn();
+    const fetchFn = vi.fn().mockResolvedValue(makeResponse());
+
+    const { decorate } = createAIDecoration(fetchFn, () => {}, onUsage);
+
+    await decorate("test prompt");
+
+    expect(onUsage).toHaveBeenCalledOnce();
+    expect(onUsage).toHaveBeenCalledWith({
+      promptTokens: 10,
+      completionTokens: 20,
+      totalTokens: 30,
+    });
+  });
+
+  it("does not call onUsage on failure", async () => {
+    const onUsage = vi.fn();
+    const fetchFn = vi.fn().mockRejectedValue(new Error("fail"));
+
+    const { decorate } = createAIDecoration(fetchFn, () => {}, onUsage);
+
+    await decorate("test prompt");
+
+    expect(onUsage).not.toHaveBeenCalled();
+  });
 });

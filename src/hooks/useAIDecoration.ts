@@ -1,4 +1,5 @@
 import type { AIDecorateResponse } from "../types/ai.js";
+import type { AIUsage } from "../types/ai.js";
 
 export type AIDecorationState = {
   narrative: string | null;
@@ -11,6 +12,7 @@ type FetchFn = (prompt: string) => Promise<AIDecorateResponse>;
 export function createAIDecoration(
   fetchFn: FetchFn,
   onStateChange: (state: AIDecorationState) => void,
+  onUsage?: (usage: AIUsage) => void,
 ) {
   let currentRequestId = 0;
 
@@ -34,6 +36,7 @@ export function createAIDecoration(
       // Only apply if this is still the latest request
       if (requestId === currentRequestId) {
         setState({ narrative: response.narrative, loading: false });
+        onUsage?.(response.usage);
       }
     } catch (err: unknown) {
       if (requestId === currentRequestId) {

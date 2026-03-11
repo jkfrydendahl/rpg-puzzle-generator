@@ -38,11 +38,18 @@ export function HomePage() {
 
   const usageTracker = useRef(createUsageTracker());
   const aiDecorationRef = useRef(
-    createAIDecoration(decoratePuzzle, (state) => {
-      setNarrative(state.narrative);
-      setAiLoading(state.loading);
-      setAiError(state.error);
-    }),
+    createAIDecoration(
+      decoratePuzzle,
+      (state) => {
+        setNarrative(state.narrative);
+        setAiLoading(state.loading);
+        setAiError(state.error);
+      },
+      (usage) => {
+        setCurrentAIUsage(usage);
+        usageTracker.current.record(usage);
+      },
+    ),
   );
 
   const handleGenerate = useCallback(() => {
@@ -71,9 +78,7 @@ export function HomePage() {
 
       // Auto-decorate when AI is enabled (S17)
       if (settings.aiEnabled) {
-        aiDecorationRef.current.decorate(prompt).then(() => {
-          // Record usage after decoration completes
-        });
+        aiDecorationRef.current.decorate(prompt);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Generation failed");
