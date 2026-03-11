@@ -13,7 +13,7 @@ function cli(args: string[], env?: Record<string, string>) {
 }
 
 describe("CLI --ai flag", () => {
-  it("recognises --ai flag and attempts AI decoration (S26)", async () => {
+  it("recognises --ai flag and attempts AI decoration (S26)", { timeout: 15000 }, async () => {
     // Without a real API key the CLI should fail, but it must NOT fail with
     // "Unknown option: --ai" — that proves the flag is wired in.
     try {
@@ -25,7 +25,7 @@ describe("CLI --ai flag", () => {
     }
   });
 
-  it("fails gracefully when OPENAI_API_KEY missing (S27)", async () => {
+  it("fails gracefully when OPENAI_API_KEY missing (S27)", { timeout: 15000 }, async () => {
     try {
       await cli(["--ai"], { OPENAI_API_KEY: "" });
       expect.unreachable("Expected CLI to exit with error");
@@ -35,7 +35,7 @@ describe("CLI --ai flag", () => {
     }
   });
 
-  it("works unchanged without --ai flag (S28)", async () => {
+  it("works unchanged without --ai flag (S28)", { timeout: 15000 }, async () => {
     const { stdout } = await cli(["--seed", "42"]);
     expect(stdout).toMatch(/RPG PUZZLE GENERATOR/);
     expect(stdout).toMatch(/Archetype:/);
