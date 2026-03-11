@@ -117,18 +117,16 @@ export function HomePage() {
           generating={generating}
         />
         <main className="puzzle-column">
-          {puzzle && (narrative || aiLoading || aiError) ? (
+          {puzzle && settings.aiEnabled && (narrative || aiLoading || aiError) ? (
             <MechanicalDetails
               puzzle={puzzle}
               hasNarrative={narrative !== null}
               narrativeSlot={
-                settings.aiEnabled && (narrative || aiLoading || aiError) ? (
-                  <NarrativeDisplay
-                    narrative={narrative}
-                    loading={aiLoading}
-                    error={aiError}
-                  />
-                ) : undefined
+                <NarrativeDisplay
+                  narrative={narrative}
+                  loading={aiLoading}
+                  error={aiError}
+                />
               }
             />
           ) : (

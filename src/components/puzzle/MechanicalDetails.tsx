@@ -16,7 +16,7 @@ export function MechanicalDetails({ puzzle, hasNarrative, narrativeSlot }: Props
 
   return (
     <div className="mechanical-details has-narrative" role="group" {...(open ? { open: "" } : {})}>
-      {narrativeSlot && <div className="mechanical-narrative">{narrativeSlot}</div>}
+      {narrativeSlot}
       <button
         className="mechanical-toggle"
         type="button"
@@ -26,7 +26,7 @@ export function MechanicalDetails({ puzzle, hasNarrative, narrativeSlot }: Props
         <span className="mechanical-toggle-icon">{open ? "▾" : "▸"}</span>
         Mechanical Details
       </button>
-      {open && <div className="mechanical-content">{renderContent(puzzle)}</div>}
+      {open && <div className="section-collapsible-content">{renderContent(puzzle)}</div>}
     </div>
   );
 }

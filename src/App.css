@@ -29,6 +29,10 @@
   flex: 1;
 }
 
+.app-layout > main {
+  overflow-y: auto;
+}
+
 @media (max-width: 1024px) {
   .app-layout {
     grid-template-columns: 1fr;
@@ -344,6 +348,25 @@
   color: var(--text-muted);
 }
 
+.meta-subheader {
+  margin: 0.6rem 0 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.meta-list {
+  margin: 0.2rem 0 0.4rem;
+  padding-left: 1.1rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  list-style: disc;
+}
+
+.meta-list li {
+  margin-bottom: 0.15rem;
+}
+
 .score-bar {
   display: flex;
   align-items: center;
@@ -408,6 +431,13 @@
 
 .warnings-list {
   margin-top: 0.5rem;
+}
+
+.warnings-list p {
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  margin: 0 0 0.25rem;
 }
 
 .warnings-list ul {
@@ -522,6 +552,7 @@
   justify-content: center;
   gap: 0.75rem;
   padding: 2rem 1.5rem;
+  flex: 1;
   color: var(--text-muted);
 }
 
@@ -552,29 +583,7 @@
   color: var(--error);
   font-size: 0.85rem;
   margin: 0;
-}
-
-.narrative-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.narrative-header h3 {
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-}
-
-.narrative-header .copy-button {
-  padding: 0.3rem 0.6rem;
-  font-size: 0.75rem;
+  padding: 0.5rem 0;
 }
 
 .narrative-text {
@@ -602,6 +611,82 @@
   margin-top: 0;
 }
 
+/* ─── Collapsible Sections (shared) ──────────────────── */
+.section-collapsible {
+  /* Wrapper for toggle bar + collapsible content */
+}
+
+.section-toggle-row {
+  display: flex;
+  align-items: center;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--transition);
+}
+
+.section-toggle-row:hover {
+  background: var(--bg-surface);
+}
+
+.section-toggle-row:hover .mechanical-toggle {
+  color: var(--text-primary);
+}
+
+.section-toggle-row .mechanical-toggle {
+  flex: 1;
+  min-width: 0;
+  border-bottom: none;
+  background: transparent;
+}
+
+.section-toggle-row .mechanical-toggle:hover {
+  background: transparent;
+}
+
+.section-copy {
+  flex-shrink: 0;
+  padding: 0.3rem 0.8rem;
+  margin-right: 1rem;
+  font-size: 0.72rem;
+  background: transparent;
+  border-color: var(--border-subtle);
+}
+
+.section-collapsible-content {
+  padding: 2rem;
+}
+
+/* Cap narrative content so the Mechanical Details toggle stays on screen */
+.mechanical-details.has-narrative > .section-collapsible > .section-collapsible-content {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 10rem);
+  max-height: calc(100vh - 10rem);
+  overflow-y: auto;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-default) transparent;
+}
+
+/* WebKit / Blink (Chrome, Edge, Safari) */
+.mechanical-details.has-narrative > .section-collapsible > .section-collapsible-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mechanical-details.has-narrative > .section-collapsible > .section-collapsible-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mechanical-details.has-narrative > .section-collapsible > .section-collapsible-content::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 3px;
+}
+
+.mechanical-details.has-narrative > .section-collapsible > .section-collapsible-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
 /* ─── Mechanical Details ─────────────────────────────── */
 .mechanical-details {
   padding: 2rem;
@@ -609,11 +694,6 @@
 
 .mechanical-details.has-narrative {
   padding: 0;
-}
-
-.mechanical-narrative {
-  padding: 2rem 2rem 1.5rem;
-  border-bottom: 1px solid var(--border-subtle);
 }
 
 .mechanical-toggle {
@@ -643,8 +723,4 @@
 .mechanical-toggle-icon {
   font-size: 0.75rem;
   color: var(--accent);
-}
-
-.mechanical-content {
-  padding: 2rem;
 }

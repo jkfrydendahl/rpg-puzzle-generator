@@ -25,27 +25,11 @@ function parseNarrativeBlocks(text: string): { type: "heading" | "paragraph"; co
 }
 
 export function NarrativeDisplay({ narrative, loading, error }: Props) {
+  const [open, setOpen] = useState(true);
   const [copied, setCopied] = useState(false);
   const blocks = useMemo(() => narrative ? parseNarrativeBlocks(narrative) : [], [narrative]);
 
-  if (loading) {
-    return (
-      <div className="narrative-display loading">
-        <div className="narrative-spinner" />
-        <p>Decorating with AI…</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="narrative-display error">
-        <p className="narrative-error">{error}</p>
-      </div>
-    );
-  }
-
-  if (!narrative) return null;
+  const statusLabel = loading ? " — generating…" : error ? " — error" : "";
 
   // SAFETY: narrative is AI-generated external content.
   // Always render as text content (React auto-escapes).
@@ -61,22 +45,49 @@ export function NarrativeDisplay({ narrative, loading, error }: Props) {
   }
 
   return (
-    <div className="narrative-display">
-      <div className="narrative-header">
-        <h3>AI Narrative</h3>
-        <button className="copy-button" onClick={handleCopy}>
-          {copied ? "Copied!" : "Copy"}
+    <div className="section-collapsible">
+      <div className="section-toggle-row">
+        <button
+          className="mechanical-toggle"
+          type="button"
+          aria-expanded={open}
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          <span className="mechanical-toggle-icon">{open ? "▾" : "▸"}</span>
+          AI Narrative{statusLabel}
         </button>
-      </div>
-      <div className="narrative-text">
-        {blocks.map((block, i) =>
-          block.type === "heading" ? (
-            <h4 key={i} className="narrative-heading">{block.content}</h4>
-          ) : (
-            <p key={i}>{block.content}</p>
-          ),
+        {narrative && (
+          <button className="copy-button section-copy" onClick={handleCopy}>
+            {copied ? "Copied!" : "Copy"}
+          </button>
         )}
       </div>
+      {open && (
+        <div className="section-collapsible-content">
+          {loading && (
+            <div className="narrative-display loading">
+              <div className="narrative-spinner" />
+              <p>Decorating with AI…</p>
+            </div>
+          )}
+          {error && (
+            <div className="narrative-display error">
+              <p className="narrative-error">{error}</p>
+            </div>
+          )}
+          {narrative && (
+            <div className="narrative-text">
+              {blocks.map((block, i) =>
+                block.type === "heading" ? (
+                  <h4 key={i} className="narrative-heading">{block.content}</h4>
+                ) : (
+                  <p key={i}>{block.content}</p>
+                ),
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

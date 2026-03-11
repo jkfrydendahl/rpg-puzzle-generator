@@ -86,30 +86,34 @@ export function DiagnosticsPanel({ puzzle, score, currentAIUsage, usageSummary }
         <>
           <h3>Soft Warnings</h3>
           <div className="warnings-list">
-            <ul>
-              {puzzle.validation.softWarnings.map((w, i) => (
-                <li key={i}>{w}</li>
-              ))}
-            </ul>
+            {puzzle.validation.softWarnings.map((w, i) => (
+              <p key={i}>{w}</p>
+            ))}
           </div>
         </>
       )}
 
       {/* Puzzle metadata */}
       <h3>Metadata</h3>
-      <div className="validation-item">
-        <span className="field-label">Steps:</span> {puzzle.solution.steps.length}
-      </div>
-      <div className="validation-item">
-        <span className="field-label">Clues:</span> {puzzle.clues.length}
-      </div>
-      <div className="validation-item">
-        <span className="field-label">Hints:</span> {puzzle.hints.length}
-      </div>
+      <h4 className="meta-subheader">Interface(s)</h4>
+      <ul className="meta-list">
+        {[...new Set([...puzzle.interface.primary, ...(puzzle.interface.secondary ?? [])])].map((v, i) => (
+          <li key={i}>{v}</li>
+        ))}
+      </ul>
+      <h4 className="meta-subheader">Solution</h4>
+      <ul className="meta-list">
+        <li>{puzzle.solution.steps.length} steps</li>
+        <li>{puzzle.clues.length} clues</li>
+        <li>{puzzle.hints.length} hints</li>
+      </ul>
       {puzzle.twist && (
-        <div className="validation-item">
-          <span className="field-label">Twist:</span> {puzzle.twist.type}
-        </div>
+        <>
+          <h4 className="meta-subheader">Twist</h4>
+          <ul className="meta-list">
+            <li>{puzzle.twist.type}</li>
+          </ul>
+        </>
       )}
 
       {/* AI Usage */}

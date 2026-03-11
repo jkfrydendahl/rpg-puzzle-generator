@@ -24,7 +24,7 @@ describe("NarrativeDisplay", () => {
       <NarrativeDisplay narrative={null} loading={true} error={null} />,
     );
 
-    expect(screen.getByText(/decorating|generating|loading/i)).toBeDefined();
+    expect(screen.getByText(/Decorating with AI/)).toBeDefined();
   });
 
   it("shows error message on failure (S21)", () => {
